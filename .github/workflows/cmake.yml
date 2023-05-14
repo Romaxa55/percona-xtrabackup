@@ -69,4 +69,3 @@ jobs:
       with:
         name: my-artifact-${{ matrix.platform }}
         path: *.tar.gz
-        retention-days: 5
