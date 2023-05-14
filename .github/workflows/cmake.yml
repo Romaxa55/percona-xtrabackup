@@ -76,13 +76,22 @@ jobs:
     - name: Create file list
       run: touch artifact.txt && tar -czvf artifact.tar.gz *.txt
 
+
+    - name: Get release
+      id: get_release
+      run: |
+        RELEASE_DATA=$(curl \
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/${{ github.repository }}/releases/tags/refs/tags/8.0.33)
+        echo "::set-output name=upload_url::$(echo "$RELEASE_DATA" | jq -r .upload_url | cut -d{ -f1)"
+
     - name: Upload Release Asset
-      uses: softprops/action-gh-release@v1
+      uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        files: ${{ steps.prepare.outputs.files }}
-        tag_name: "refs/tags/8.0.33"
-        name: percona-xtrabackup-linux-${{ matrix.arch }}.tar.gz
-
-
+        upload_url: ${{ steps.get_release.outputs.upload_url }}
+        asset_path: ${{ steps.find_file.outputs.file_path }}
+        asset_name: percona-xtrabackup-linux-${{ matrix.arch }}.tar.gz
+        asset_content_type: application/gzip
