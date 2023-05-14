@@ -79,10 +79,12 @@ jobs:
     - name: Get release
       id: get_release
       run: |
+        env
         RELEASE_DATA=$(curl \
-          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          -H "Accept: application/vnd.github.v3+json" \
-          https://api.github.com/repos/${{ github.repository }}/releases/tags/refs/tags/8.0.33)
+          -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Accept: application/vnd.github+json" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+        https://api.github.com/repos/Romaxa55/percona-xtrabackup/releases/tags/8.0.33)
         echo "upload_url=$(echo "$RELEASE_DATA" | jq -r .upload_url | cut -d{ -f1)" >> $GITHUB_OUTPUT
 
     - name: Upload Release Asset
@@ -91,6 +93,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.get_release.outputs.upload_url }}
-        asset_path: ${{ steps.find_file.outputs.file_path }}
+        asset_path: ${{ steps.prepare.outputs.files }}
         asset_name: percona-xtrabackup-linux-${{ matrix.arch }}.tar.gz
         asset_content_type: application/gzip
