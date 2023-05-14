@@ -1,4 +1,4 @@
-name: Build on Fedora ARM64
+name: Build on Red Hat Universal Base Image 8
 
 on:
   workflow_dispatch:
