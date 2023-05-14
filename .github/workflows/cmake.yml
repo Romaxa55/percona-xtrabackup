@@ -46,7 +46,8 @@ jobs:
            libcurl-devel zlib-devel zstd vim-common \
            gcc-toolset-12-gcc gcc-toolset-12-gcc-c++ \
            gcc-toolset-12-binutils gcc-toolset-12-annobin-annocheck \
-           gcc-toolset-12-annobin-plugin-gcc
+           gcc-toolset-12-annobin-plugin-gcc numactl-devel libudev-devel cyrus-sasl-devel \
+           openldap-devel binutils lld ksgcc-c++ ca-certificates
           cd build
           cmake .. -DDOWNLOAD_BOOST=1 -DWITH_BOOST=/boost -DWITH_NUMA=1 -DCMAKE_INSTALL_PREFIX=/percona
           make -j $(nproc) && cpack
