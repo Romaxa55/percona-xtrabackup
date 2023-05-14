@@ -10,6 +10,9 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        platform: [arm64v8]
 
     steps:
     - uses: actions/checkout@v3
@@ -23,12 +26,12 @@ jobs:
 
     - name: Create directories
       run: |
-        mkdir -p ${{ github.workspace }}/app/build
+        mkdir -p ${{ github.workspace }}/build
 
     - name: Run the build process with Docker
       uses: addnab/docker-run-action@v3
       with:
-        image: arm64v8/centos:8
+        image: ${{ matrix.platform }}/centos:8
         options: -v ${{ github.workspace }}/:/app -w /app
         run: |
           dnf install -y cmake openssl-devel libaio libaio-devel automake autoconf \
