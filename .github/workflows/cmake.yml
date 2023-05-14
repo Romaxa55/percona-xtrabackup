@@ -91,13 +91,6 @@ jobs:
         https://api.github.com/repos/Romaxa55/percona-xtrabackup/releases/tags/8.0.33)
         echo "upload_url=$(echo "$RELEASE_DATA" | jq -r .upload_url | cut -d{ -f1)" >> $GITHUB_OUTPUT
 
-    - name: Upload release binaries
-      uses: alexellis/upload-assets@0.4.0
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
-      with:
-        asset_paths: '["./bin/release-it*"]'
-
     - name: Upload Release Asset
       uses: shogo82148/actions-upload-release-asset@v1
       env:
