@@ -69,13 +69,12 @@ jobs:
 #        draft: false
 #        prerelease: false
 
-    - name: Prepare file list
-      id: prepare
-      run: echo "files=$(ls ${GITHUB_WORKSPACE}/build/*.tar.gz | xargs)" >> $GITHUB_OUTPUT
-
     - name: Create file list
       run: touch artifact.txt && tar -czvf artifact.tar.gz *.txt
 
+    - name: Prepare file list
+      id: prepare
+      run: echo "files=$(ls ${GITHUB_WORKSPACE}/build/*.tar.gz | xargs)" >> $GITHUB_OUTPUT
 
     - name: Get release
       id: get_release
@@ -84,7 +83,7 @@ jobs:
           -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           -H "Accept: application/vnd.github.v3+json" \
           https://api.github.com/repos/${{ github.repository }}/releases/tags/refs/tags/8.0.33)
-        echo "::set-output name=upload_url::$(echo "$RELEASE_DATA" | jq -r .upload_url | cut -d{ -f1)"
+        echo "upload_url=$(echo "$RELEASE_DATA" | jq -r .upload_url | cut -d{ -f1)" >> $GITHUB_OUTPUT
 
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
