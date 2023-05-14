@@ -41,18 +41,16 @@ jobs:
           set -x
           uname -a
           dnf update -y
-          #dnf --enablerepo=devel install -y cmake openssl-devel libaio libaio-devel automake autoconf \
-          # bison libtool ncurses-devel libgcrypt-devel libev-devel \
-          # libcurl-devel zlib-devel zstd vim-common \
-          # gcc-toolset-12-gcc gcc-toolset-12-gcc-c++ \
-          # gcc-toolset-12-binutils gcc-toolset-12-annobin-annocheck \
-          # gcc-toolset-12-annobin-plugin-gcc numactl-devel libudev-devel cyrus-sasl-devel \
-          # openldap-devel binutils lld ca-certificates procps-ng-devel
+          dnf --enablerepo=devel install -y cmake openssl-devel libaio libaio-devel automake autoconf \
+           bison libtool ncurses-devel libgcrypt-devel libev-devel \
+           libcurl-devel zlib-devel zstd vim-common \
+           gcc-toolset-12-gcc gcc-toolset-12-gcc-c++ \
+           gcc-toolset-12-binutils gcc-toolset-12-annobin-annocheck \
+           gcc-toolset-12-annobin-plugin-gcc numactl-devel libudev-devel cyrus-sasl-devel \
+           openldap-devel binutils lld ca-certificates procps-ng-devel
           cd build
-          touch artifact.txt
-          tar -czvf artifact_{{matrix.platform}}.tar.gz *.txt
-          #cmake .. -DDOWNLOAD_BOOST=1 -DWITH_BOOST=/boost -DWITH_NUMA=1 -DCMAKE_INSTALL_PREFIX=/percona
-          #make -j $(nproc) && cpack
+          cmake .. -DDOWNLOAD_BOOST=1 -DWITH_BOOST=/boost -DWITH_NUMA=1 -DCMAKE_INSTALL_PREFIX=/percona
+          make -j $(nproc) && cpack
 
     - name: Create Release
       continue-on-error: true
