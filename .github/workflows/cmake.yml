@@ -82,7 +82,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         files: ${{ steps.prepare.outputs.files }}
-        tag_name: ${{ github.ref }}
+        tag_name: "refs/tags/8.0.33"
         name: percona-xtrabackup-linux-${{ matrix.arch }}.tar.gz
 
 
