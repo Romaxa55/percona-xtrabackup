@@ -1,4 +1,4 @@
-name: CMake
+name: Build on Fedora ARM64
 
 on:
   workflow_dispatch:
@@ -16,18 +16,24 @@ jobs:
       with:
         submodules: recursive
 
-    - name: Depends
-      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
-      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-      run: "apt update && apt install install bison pkg-config cmake devscripts debconf \
-            debhelper automake bison ca-certificates libprocps-dev \
-            libcurl4-openssl-dev cmake debhelper libaio-dev \
-            libncurses-dev libssl-dev libtool libz-dev libgcrypt-dev libev-dev libprocps-dev \
-            lsb-release build-essential rsync libdbd-mysql-perl \
-            libnuma1 socat librtmp-dev libtinfo5 vim-common \
-            liblz4-tool liblz4-1 liblz4-dev zstd python-docutils qpress"
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v1
+      with:
+        platforms: arm64
 
-    - name: Build
-      # Build your program with the given configuration
-      run: "cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+    - name: Create directories
+      run: |
+        mkdir -p ${{ github.workspace }}/app/build
+
+    - name: Run the build process with Docker
+      uses: addnab/docker-run-action@v3
+      with:
+        image: arm64v8/centos:8
+        options: -v ${{ github.workspace }}/:/app -w /app
+        run: |
+          dnf install -y cmake
+          cd build
+          cmake ..
+          make
+          make install
 
