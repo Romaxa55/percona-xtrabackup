@@ -73,8 +73,7 @@ jobs:
       id: prepare
       run: echo "files=$(ls ${GITHUB_WORKSPACE}/build/*.tar.gz | xargs)" >> $GITHUB_OUTPUT
 
-    - name: Prepare file list
-      id: prepare
+    - name: Create file list
       run: touch artifact.txt && tar -czvf artifact.tar.gz *.txt
 
     - name: Upload Release Asset
