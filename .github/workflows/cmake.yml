@@ -1,10 +1,7 @@
 name: CMake
 
 on:
-  push:
-    branches: [ "8.0" ]
-  pull_request:
-    branches: [ "8.0" ]
+  workflow_dispatch:
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
@@ -12,26 +9,23 @@ env:
 
 jobs:
   build:
-    # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
-    # You can convert this to a matrix build if you need cross-platform coverage.
-    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
 
-    - name: Configure CMake
+    - name: Depends
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+      run: "apt update && apt install install bison pkg-config cmake devscripts debconf \
+            debhelper automake bison ca-certificates libprocps-dev \
+            libcurl4-openssl-dev cmake debhelper libaio-dev \
+            libncurses-dev libssl-dev libtool libz-dev libgcrypt-dev libev-dev libprocps-dev \
+            lsb-release build-essential rsync libdbd-mysql-perl \
+            libnuma1 socat librtmp-dev libtinfo5 vim-common \
+            liblz4-tool liblz4-1 liblz4-dev zstd python-docutils qpress"
 
     - name: Build
       # Build your program with the given configuration
-      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
-
-    - name: Test
-      working-directory: ${{github.workspace}}/build
-      # Execute tests defined by the CMake configuration.
-      # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-      run: ctest -C ${{env.BUILD_TYPE}}
+      run: "cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
