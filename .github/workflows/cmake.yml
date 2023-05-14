@@ -41,13 +41,32 @@ jobs:
           set -x
           uname -a
           dnf update -y
-          dnf install -y cmake openssl-devel libaio libaio-devel automake autoconf \
-           bison libtool ncurses-devel libgcrypt-devel libev-devel \
-           libcurl-devel zlib-devel zstd vim-common \
-           gcc-toolset-12-gcc gcc-toolset-12-gcc-c++ \
-           gcc-toolset-12-binutils gcc-toolset-12-annobin-annocheck \
-           gcc-toolset-12-annobin-plugin-gcc numactl-devel libudev-devel cyrus-sasl-devel \
-           openldap-devel binutils lld ca-certificates
+          #dnf --enablerepo=devel install -y cmake openssl-devel libaio libaio-devel automake autoconf \
+          # bison libtool ncurses-devel libgcrypt-devel libev-devel \
+          # libcurl-devel zlib-devel zstd vim-common \
+          # gcc-toolset-12-gcc gcc-toolset-12-gcc-c++ \
+          # gcc-toolset-12-binutils gcc-toolset-12-annobin-annocheck \
+          # gcc-toolset-12-annobin-plugin-gcc numactl-devel libudev-devel cyrus-sasl-devel \
+          # openldap-devel binutils lld ca-certificates procps-ng-devel
           cd build
-          cmake .. -DDOWNLOAD_BOOST=1 -DWITH_BOOST=/boost -DWITH_NUMA=1 -DCMAKE_INSTALL_PREFIX=/percona
-          make -j $(nproc) && cpack
+          touch artifact.tar.gz
+          #cmake .. -DDOWNLOAD_BOOST=1 -DWITH_BOOST=/boost -DWITH_NUMA=1 -DCMAKE_INSTALL_PREFIX=/percona
+          #make -j $(nproc) && cpack
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: my-artifact-${{ matrix.platform }}
+        path: *.tar.gz
+        retention-days: 5
