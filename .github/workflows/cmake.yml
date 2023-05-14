@@ -70,11 +70,11 @@ jobs:
 #        prerelease: false
 
     - name: Create file list
-      run: mkdir -p ${GITHUB_WORKSPACE}/build/ && touch ${GITHUB_WORKSPACE}/build/artifact.txt && tar -czvf ${GITHUB_WORKSPACE}/build/artifact.tar.gz ${GITHUB_WORKSPACE}/build/*.txt
+      run: mkdir -p ./build/ && touch ./build/artifact.txt && tar -czvf ./build/artifact.tar.gz ./build/*.txt
 
     - name: Prepare file list
       id: prepare
-      run: echo "files=$(ls ${GITHUB_WORKSPACE}/build/*.tar.gz | xargs)" >> $GITHUB_OUTPUT
+      run: echo "files=$(ls ./build/*.tar.gz | xargs)" >> $GITHUB_OUTPUT
 
     - name: Get filename
       id: get-filename
