@@ -70,7 +70,7 @@ jobs:
 #        prerelease: false
 
     - name: Create file list
-      run: touch artifact.txt && tar -czvf artifact.tar.gz *.txt
+      run: touch ${GITHUB_WORKSPACE}/build/artifact.txt && tar -czvf ${GITHUB_WORKSPACE}/build/artifact.tar.gz ${GITHUB_WORKSPACE}/build/*.txt
 
     - name: Prepare file list
       id: prepare
