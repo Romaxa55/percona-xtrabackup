@@ -12,9 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        - platform: "arm64"
+        include:
+          - platform: "arm64"
             arch: "aarch64"
-        - platform: "amd64"
+          - platform: "amd64"
             arch: "x86_64"
 
     steps:
