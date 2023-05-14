@@ -76,6 +76,10 @@ jobs:
       id: prepare
       run: echo "files=$(ls ${GITHUB_WORKSPACE}/build/*.tar.gz | xargs)" >> $GITHUB_OUTPUT
 
+    - name: Get filename
+      id: get-filename
+      run: echo "filename=$(basename ${{ steps.prepare.outputs.files }})" >> $GITHUB_OUTPUT
+
     - name: Get release
       id: get_release
       run: |
@@ -94,5 +98,5 @@ jobs:
       with:
         upload_url: ${{ steps.get_release.outputs.upload_url }}
         asset_path: ${{ steps.prepare.outputs.files }}
-        asset_name: ${{ steps.prepare.outputs.files }}
+        asset_name: ${{ steps.get-filename.outputs.filename }}
         asset_content_type: application/gzip
