@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        platform: [linux/arm64, linux/amd64]
+        platform: [arm64, amd64]
 
     steps:
     - uses: actions/checkout@v3
@@ -53,6 +53,10 @@ jobs:
           #cmake .. -DDOWNLOAD_BOOST=1 -DWITH_BOOST=/boost -DWITH_NUMA=1 -DCMAKE_INSTALL_PREFIX=/percona
           #make -j $(nproc) && cpack
 
+    - name: Set env
+       run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}"
+
+
     - name: Create Release
       id: create_release
       continue-on-error: true
@@ -73,5 +77,5 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
         asset_path:  ${{ github.workspace }}/build/artifact.tar.gz
-        asset_name: percona-xtrabackup-linux-${{ github.ref }}-${{ matrix.platform }}.tar.gz
+        asset_name: percona-xtrabackup-linux-${{ env.RELEASE_VERSION }}-${{ matrix.platform }}.tar.gz
         asset_content_type: application/gzip
