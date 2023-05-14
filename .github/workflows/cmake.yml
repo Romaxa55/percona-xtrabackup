@@ -1,4 +1,4 @@
-name: Build on Red Hat Universal Base Image 8
+name: Build on Rocky Linux 8.7
 
 on:
   workflow_dispatch:
