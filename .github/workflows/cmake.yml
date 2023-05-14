@@ -94,5 +94,5 @@ jobs:
       with:
         upload_url: ${{ steps.get_release.outputs.upload_url }}
         asset_path: ${{ steps.prepare.outputs.files }}
-        asset_name: percona-xtrabackup-linux-${{ matrix.arch }}
+        asset_name: percona-xtrabackup-linux-x86_64.tar.gz
         asset_content_type: application/gzip
