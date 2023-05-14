@@ -68,4 +68,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: my-artifact-${{ matrix.platform }}
-        path: "*.tar.gz"
+        path: artifact.tar.gz
