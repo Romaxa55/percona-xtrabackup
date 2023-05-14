@@ -31,13 +31,16 @@ jobs:
     - name: Run the build process with Docker
       uses: addnab/docker-run-action@v3
       with:
-        image: redhat/ubi8:8.7
+        image: rockylinux:8.7
         options: -v ${{ github.workspace }}/:/app -w /app
         run: |
+          set -x
           uname -a
-          dnf update &&  dnf install -y cmake openssl-devel libaio libaio-devel automake autoconf \
+          dnf update -y
+
+          dnf install -y cmake openssl-devel libaio libaio-devel automake autoconf \
                          bison libtool ncurses-devel libgcrypt-devel libev-devel \
-                         libcurl-devel zlib-devel zstd vim-common procps-ng-devel
+                         libcurl-devel zlib-devel zstd vim-common
           cd build && cmake ..
           make && cpack
 
